@@ -1,0 +1,181 @@
+{% extends 'sticky_notes_app/base.html' %}
+
+{% block title %}All Notes - Sticky Notes{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Search and Filters Sidebar -->
+    <div class="col-lg-3 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-filter me-2"></i>Search & Filters
+                </h5>
+            </div>
+            <div class="card-body">
+                <form method="get" action="{% url 'sticky_notes_app:note_search' %}">
+                    <!-- Search -->
+                    <div class="mb-3">
+                        <label for="search_query" class="form-label">Search</label>
+                        <input type="text" class="form-control" id="search_query" 
+                               name="search_query" 
+                               value="{{ request.GET.search_query|default:'' }}"
+                               placeholder="Search notes...">
+                    </div>
+                    
+                    <!-- Category Filter -->
+                    <div class="mb-3">
+                        <label for="category_filter" class="form-label">Category</label>
+                        <select class="form-select" id="category_filter" name="category_filter">
+                            <option value="">All Categories</option>
+                            {% for value, label in categories %}
+                                <option value="{{ value }}" 
+                                        {% if request.GET.category_filter == value %}selected{% endif %}>
+                                    {{ label }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <!-- Priority Filter -->
+                    <div class="mb-3">
+                        <label for="priority_filter" class="form-label">Priority</label>
+                        <select class="form-select" id="priority_filter" name="priority_filter">
+                            <option value="">All Priorities</option>
+                            {% for value, label in priorities %}
+                                <option value="{{ value }}" 
+                                        {% if request.GET.priority_filter == value %}selected{% endif %}>
+                                    {{ label }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <!-- Filter Buttons -->
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-search me-1"></i>Search
+                        </button>
+                        <a href="{% url 'sticky_notes_app:note_list' %}" 
+                           class="btn btn-outline-secondary">
+                            <i class="fas fa-times me-1"></i>Clear
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Notes List -->
+    <div class="col-lg-9">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>
+                <i class="fas fa-sticky-note me-2"></i>All Notes
+                {% if notes %}
+                    <span class="badge bg-secondary ms-2">{{ notes|length }}</span>
+                {% endif %}
+            </h2>
+            <a href="{% url 'sticky_notes_app:note_create' %}" 
+               class="btn btn-success">
+                <i class="fas fa-plus me-1"></i>New Note
+            </a>
+        </div>
+        
+        {% if notes %}
+            <div class="row">
+                {% for note in notes %}
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card h-100 note-card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <span class="badge {{ note.get_category_color }}">
+                                    {{ note.get_category_display }}
+                                </span>
+                                <span class="badge {{ note.get_priority_color }}">
+                                    {{ note.get_priority_display }}
+                                </span>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">{{ note.title }}</h5>
+                                <div class="card-text note-content-preview">
+                                    {% if note.content|length > 150 %}
+                                        {{ note.content|slice:":150"|linebreaksbr }}...
+                                        <small class="text-muted d-block mt-2">
+                                            <i class="fas fa-ellipsis-h"></i> Content truncated
+                                        </small>
+                                    {% else %}
+                                        {{ note.content|linebreaksbr }}
+                                    {% endif %}
+                                </div>
+                                <small class="text-muted d-block mt-3">
+                                    <i class="fas fa-clock me-1"></i>
+                                    Updated: {{ note.updated_at|date:"M d, Y" }}
+                                </small>
+                            </div>
+                            <div class="card-footer">
+                                <div class="btn-group w-100" role="group">
+                                    <a href="{% url 'sticky_notes_app:note_detail' note.pk %}" 
+                                       class="btn btn-outline-primary btn-sm">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="{% url 'sticky_notes_app:note_update' note.pk %}" 
+                                       class="btn btn-outline-warning btn-sm">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="{% url 'sticky_notes_app:note_delete' note.pk %}" 
+                                       class="btn btn-outline-danger btn-sm">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            
+            <!-- Pagination -->
+            {% if is_paginated %}
+                <nav aria-label="Notes pagination">
+                    <ul class="pagination justify-content-center">
+                        {% if page_obj.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page=1">&laquo; First</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" 
+                                   href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                            </li>
+                        {% endif %}
+                        
+                        <li class="page-item active">
+                            <span class="page-link">
+                                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                            </span>
+                        </li>
+                        
+                        {% if page_obj.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" 
+                                   href="?page={{ page_obj.next_page_number }}">Next</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" 
+                                   href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            {% endif %}
+        {% else %}
+            <div class="text-center py-5">
+                <i class="fas fa-sticky-note fa-3x text-muted mb-3"></i>
+                <h3 class="text-muted">No notes found</h3>
+                <p class="text-muted">Create your first note to get started!</p>
+                <a href="{% url 'sticky_notes_app:note_create' %}" 
+                   class="btn btn-primary">
+                    <i class="fas fa-plus me-1"></i>Create Note
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

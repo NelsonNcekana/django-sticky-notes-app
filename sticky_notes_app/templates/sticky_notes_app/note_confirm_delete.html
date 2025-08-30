@@ -1,0 +1,87 @@
+{% extends 'sticky_notes_app/base.html' %}
+
+{% block title %}Delete Note - Sticky Notes{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center delete-confirmation-page">
+    <div class="col-lg-6">
+        <div class="card border-danger">
+            <div class="card-header bg-danger text-white">
+                <h3 class="card-title mb-0">
+                    <i class="fas fa-exclamation-triangle me-2 delete-warning"></i>Confirm Deletion
+                </h3>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-danger delete-warning">
+                    <h5 class="alert-heading">
+                        <i class="fas fa-warning me-2"></i>Warning!
+                    </h5>
+                    <p class="mb-0">
+                        Are you sure you want to delete the note 
+                        <strong>"{{ object.title }}"</strong>?
+                    </p>
+                </div>
+                
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h6 class="mb-0">Note Details</h6>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Title:</strong> {{ object.title }}</p>
+                        <p><strong>Category:</strong> {{ object.get_category_display }}</p>
+                        <p><strong>Priority:</strong> {{ object.get_priority_display }}</p>
+                        <p><strong>Created:</strong> {{ object.created_at|date:"F d, Y" }}</p>
+                        <p><strong>Content Preview:</strong></p>
+                        <div class="border rounded p-2 bg-light">
+                            {{ object.content|truncatewords:30 }}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Note:</strong> This action cannot be undone. The note will be permanently deleted.
+                </div>
+                
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'sticky_notes_app:note_detail' object.pk %}" 
+                           class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-1"></i>Cancel
+                        </a>
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash me-1"></i>Delete Note
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Alternative Actions -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-lightbulb me-2"></i>Alternative Actions
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <a href="{% url 'sticky_notes_app:note_update' object.pk %}" 
+                           class="btn btn-warning w-100 mb-2">
+                            <i class="fas fa-edit me-1"></i>Edit Instead
+                        </a>
+                    </div>
+                    <div class="col-md-6">
+                        <a href="{% url 'sticky_notes_app:note_archive' object.pk %}" 
+                           class="btn btn-info w-100 mb-2">
+                            <i class="fas fa-archive me-1"></i>Archive Instead
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
