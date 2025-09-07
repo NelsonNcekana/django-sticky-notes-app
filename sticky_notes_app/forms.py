@@ -6,12 +6,8 @@ from .models import Note
 
 
 class NoteForm(forms.ModelForm):
-    """
-    Form for creating and editing notes.
-    """
 
     class Meta:
-        """Meta configuration for NoteForm."""
         model = Note
         fields = ['title', 'content', 'category', 'priority']
         widgets = {
@@ -39,16 +35,12 @@ class NoteForm(forms.ModelForm):
         }
 
     def clean_title(self):
-        """
-        Validate title field.
-        """
         title = self.cleaned_data.get('title')
         if not title or title.strip() == '':
             raise forms.ValidationError("Title is required.")
         return title.strip()
 
     def clean_content(self):
-        """Validate content field."""
         content = self.cleaned_data.get('content')
         if not content or content.strip() == '':
             raise forms.ValidationError("Content is required.")
@@ -56,9 +48,6 @@ class NoteForm(forms.ModelForm):
 
 
 class NoteSearchForm(forms.Form):
-    """
-    Form for searching notes.
-    """
 
     search_query = forms.CharField(
         max_length=200,

@@ -3,7 +3,6 @@ Tests for the sticky_notes_app.
 """
 from django.test import TestCase, Client
 from django.urls import reverse
-from django.contrib.auth.models import User
 from django.utils import timezone
 from .models import Note
 from .forms import NoteForm, NoteSearchForm
@@ -15,7 +14,7 @@ class NoteModelTest(TestCase):
 
     def setUp(self):
         """Set up test data."""
-        self.note = Note.objects.create(  # type: ignore
+        self.note = Note.objects.create(
             title="Test Note",
             content="This is a test note content",
             category="personal",
@@ -38,8 +37,7 @@ class NoteModelTest(TestCase):
 
     def test_note_default_values(self):
         """Test default values for optional fields."""
-        note = Note.objects.create(  # type: ignore
-            title="Default Note",
+        note = Note.objects.create(            title="Default Note",
             content="Content"
         )
         self.assertEqual(note.category, "other")
@@ -56,19 +54,17 @@ class NoteModelTest(TestCase):
 
     def test_note_ordering(self):
         """Test that notes are ordered by updated_at descending."""
-        note2 = Note.objects.create(  # type: ignore
-            title="Second Note",
+        note2 = Note.objects.create(            title="Second Note",
             content="Second content"
         )
-        note3 = Note.objects.create(  # type: ignore
-            title="Third Note",
+        note3 = Note.objects.create(            title="Third Note",
             content="Third content"
         )
 
         # Update the first note to make it most recent
         self.note.save()
 
-        notes = Note.objects.all()  # type: ignore
+        notes = Note.objects.all()
         self.assertEqual(notes[0], self.note)
         self.assertEqual(notes[1], note3)
         self.assertEqual(notes[2], note2)
@@ -176,14 +172,12 @@ class NoteViewsTest(TestCase):
     def setUp(self):
         """Set up test data and client."""
         self.client = Client()
-        self.note = Note.objects.create(  # type: ignore
-            title="Test Note",
+        self.note = Note.objects.create(            title="Test Note",
             content="Test content",
             category="personal",
             priority="medium"
         )
-        self.note2 = Note.objects.create(  # type: ignore
-            title="Work Note",
+        self.note2 = Note.objects.create(            title="Work Note",
             content="Work related content",
             category="work",
             priority="high"
@@ -255,7 +249,7 @@ class NoteViewsTest(TestCase):
         self.assertEqual(response.status_code, 302)  # Redirect after success
 
         # Check if note was created
-        new_note = Note.objects.get(title='New Note')  # type: ignore
+        new_note = Note.objects.get(title='New Note')
         self.assertEqual(new_note.content, 'New note content')
         self.assertEqual(new_note.category, 'ideas')
         self.assertEqual(new_note.priority, 'low')
@@ -316,7 +310,7 @@ class NoteViewsTest(TestCase):
         self.assertEqual(response.status_code, 302)  # Redirect after success
 
         # Check if note was updated
-        updated_note = Note.objects.get(pk=self.note.pk)  # type: ignore
+        updated_note = Note.objects.get(pk=self.note.pk)
         self.assertEqual(updated_note.title, 'Updated Note')
         self.assertEqual(updated_note.content, 'Updated content')
         self.assertEqual(updated_note.category, 'shopping')
@@ -340,9 +334,8 @@ class NoteViewsTest(TestCase):
         self.assertEqual(response.status_code, 302)  # Redirect after success
 
         # Check if note was deleted
-        with self.assertRaises(Note.DoesNotExist):  # type: ignore
-            Note.objects.get(pk=note_pk)  # type: ignore
-
+        with self.assertRaises(Note.DoesNotExist):
+            Note.objects.get(pk=note_pk)
     def test_note_archive_view(self):
         """Test note archive functionality."""
         self.assertFalse(self.note.is_archived)
@@ -353,7 +346,7 @@ class NoteViewsTest(TestCase):
         self.assertEqual(response.status_code, 302)  # Redirect after success
 
         # Check if note was archived
-        archived_note = Note.objects.get(pk=self.note.pk)  # type: ignore
+        archived_note = Note.objects.get(pk=self.note.pk)
         self.assertTrue(archived_note.is_archived)
 
     def test_note_search_view(self):
@@ -435,7 +428,7 @@ class NoteIntegrationTest(TestCase):
         self.assertEqual(response.status_code, 302)
 
         # Get the created note
-        note = Note.objects.get(title='Workflow Note')  # type: ignore
+        note = Note.objects.get(title='Workflow Note')
         self.assertEqual(note.content, 'This is a test workflow')
 
         # 2. Edit the note
@@ -452,7 +445,7 @@ class NoteIntegrationTest(TestCase):
         self.assertEqual(response.status_code, 302)
 
         # Check updates
-        updated_note = Note.objects.get(pk=note.pk)  # type: ignore
+        updated_note = Note.objects.get(pk=note.pk)
         self.assertEqual(updated_note.title, 'Updated Workflow Note')
         self.assertEqual(updated_note.category, 'ideas')
 
@@ -462,7 +455,7 @@ class NoteIntegrationTest(TestCase):
         )
         self.assertEqual(response.status_code, 302)
 
-        archived_note = Note.objects.get(pk=note.pk)  # type: ignore
+        archived_note = Note.objects.get(pk=note.pk)
         self.assertTrue(archived_note.is_archived)
 
         # 4. Unarchive the note (so we can delete it)
@@ -471,7 +464,7 @@ class NoteIntegrationTest(TestCase):
         )
         self.assertEqual(response.status_code, 302)
 
-        unarchived_note = Note.objects.get(pk=note.pk)  # type: ignore
+        unarchived_note = Note.objects.get(pk=note.pk)
         self.assertFalse(unarchived_note.is_archived)
 
         # 5. Delete the note
@@ -481,26 +474,22 @@ class NoteIntegrationTest(TestCase):
         self.assertEqual(response.status_code, 302)
 
         # Verify deletion
-        with self.assertRaises(Note.DoesNotExist):  # type: ignore
-            Note.objects.get(pk=note.pk)  # type: ignore
-
+        with self.assertRaises(Note.DoesNotExist):
+            Note.objects.get(pk=note.pk)
     def test_search_and_filter_workflow(self):
         """Test search and filter functionality workflow."""
         # Create multiple notes
-        Note.objects.create(  # type: ignore
-            title="Personal Task",
+        Note.objects.create(            title="Personal Task",
             content="Personal task content",
             category="personal",
             priority="low"
         )
-        Note.objects.create(  # type: ignore
-            title="Work Task",
+        Note.objects.create(            title="Work Task",
             content="Work task content",
             category="work",
             priority="high"
         )
-        Note.objects.create(  # type: ignore
-            title="Shopping List",
+        Note.objects.create(            title="Shopping List",
             content="Shopping items",
             category="shopping",
             priority="medium"
@@ -543,8 +532,7 @@ class NoteEdgeCasesTest(TestCase):
     def setUp(self):
         """Set up test data."""
         self.client = Client()
-        self.note = Note.objects.create(  # type: ignore
-            title="Edge Case Note",
+        self.note = Note.objects.create(            title="Edge Case Note",
             content="Edge case content",
             category="other",
             priority="medium"
@@ -565,7 +553,7 @@ class NoteEdgeCasesTest(TestCase):
         )
         self.assertEqual(response.status_code, 302)
 
-        created_note = Note.objects.get(title=long_title)  # type: ignore
+        created_note = Note.objects.get(title=long_title)
         self.assertEqual(len(created_note.title), 200)
 
     def test_note_with_very_long_content(self):
@@ -583,7 +571,7 @@ class NoteEdgeCasesTest(TestCase):
         )
         self.assertEqual(response.status_code, 302)
 
-        created_note = Note.objects.get(title='Long Content Note')  # type: ignore
+        created_note = Note.objects.get(title='Long Content Note')
         self.assertEqual(created_note.content, long_content.strip())
 
     def test_note_with_special_characters(self):
@@ -603,15 +591,14 @@ class NoteEdgeCasesTest(TestCase):
         )
         self.assertEqual(response.status_code, 302)
 
-        created_note = Note.objects.get(title=special_title)  # type: ignore
+        created_note = Note.objects.get(title=special_title)
         self.assertEqual(created_note.content, special_content)
 
     def test_concurrent_note_operations(self):
         """Test concurrent operations on the same note."""
         # Simulate concurrent updates
-        note1 = Note.objects.get(pk=self.note.pk)  # type: ignore
-        note2 = Note.objects.get(pk=self.note.pk)  # type: ignore
-
+        note1 = Note.objects.get(pk=self.note.pk)
+        note2 = Note.objects.get(pk=self.note.pk)
         note1.title = "First Update"
         note1.save()
 
@@ -619,27 +606,24 @@ class NoteEdgeCasesTest(TestCase):
         note2.save()
 
         # Both should be saved
-        final_note = Note.objects.get(pk=self.note.pk)  # type: ignore
+        final_note = Note.objects.get(pk=self.note.pk)
         self.assertEqual(final_note.title, "Second Update")
 
     def test_note_ordering_with_same_timestamp(self):
         """Test note ordering when multiple notes have same timestamp."""
         # Create notes with same timestamp
         timestamp = timezone.now()
-        note1 = Note.objects.create(  # type: ignore
-            title="First Note",
+        note1 = Note.objects.create(            title="First Note",
             content="First content",
             created_at=timestamp,
             updated_at=timestamp
         )
-        note2 = Note.objects.create(  # type: ignore
-            title="Second Note",
+        note2 = Note.objects.create(            title="Second Note",
             content="Second content",
             created_at=timestamp,
             updated_at=timestamp
         )
 
-        notes = Note.objects.all()  # type: ignore
-        # Should maintain creation order when timestamps are identical
+        notes = Note.objects.all()        # Should maintain creation order when timestamps are identical
         self.assertIn(note1, notes)
         self.assertIn(note2, notes)
