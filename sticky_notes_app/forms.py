@@ -13,12 +13,12 @@ from .models import Note
 class NoteForm(forms.ModelForm):
     """
     Form for creating and editing notes.
-    
+
     This form provides fields for all note attributes with appropriate
     widgets, validation, and styling. It includes custom validation
     for title and content fields to ensure they are not empty or
     whitespace-only.
-    
+
     Attributes:
         Meta.model: The Note model this form is based on
         Meta.fields: List of fields to include in the form
@@ -56,12 +56,12 @@ class NoteForm(forms.ModelForm):
     def clean_title(self):
         """
         Validate the title field.
-        
+
         Ensures the title is not empty or whitespace-only.
-        
+
         Returns:
             str: The cleaned and stripped title
-            
+
         Raises:
             ValidationError: If the title is empty or whitespace-only
         """
@@ -73,12 +73,12 @@ class NoteForm(forms.ModelForm):
     def clean_content(self):
         """
         Validate the content field.
-        
+
         Ensures the content is not empty or whitespace-only.
-        
+
         Returns:
             str: The cleaned and stripped content
-            
+
         Raises:
             ValidationError: If the content is empty or whitespace-only
         """
@@ -91,11 +91,11 @@ class NoteForm(forms.ModelForm):
 class NoteSearchForm(forms.Form):
     """
     Form for searching and filtering notes.
-    
+
     This form provides fields for searching notes by text content
     and filtering by category and priority. All fields are optional
     to allow flexible searching and filtering.
-    
+
     Attributes:
         search_query: Text field for searching in title and content
         category_filter: Choice field for filtering by category

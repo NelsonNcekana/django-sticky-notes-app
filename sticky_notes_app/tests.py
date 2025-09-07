@@ -17,7 +17,7 @@ import datetime
 class NoteModelTest(TestCase):
     """
     Test cases for the Note model.
-    
+
     This test class verifies all aspects of the Note model including
     creation, validation, string representation, default values, choices,
     ordering, and archiving functionality.
@@ -26,7 +26,7 @@ class NoteModelTest(TestCase):
     def setUp(self):
         """
         Set up test data for each test method.
-        
+
         Creates a test note instance that can be used across multiple tests.
         """
         self.note = Note.objects.create(
@@ -52,7 +52,8 @@ class NoteModelTest(TestCase):
 
     def test_note_default_values(self):
         """Test default values for optional fields."""
-        note = Note.objects.create(            title="Default Note",
+        note = Note.objects.create(
+            title="Default Note",
             content="Content"
         )
         self.assertEqual(note.category, "other")
@@ -69,10 +70,12 @@ class NoteModelTest(TestCase):
 
     def test_note_ordering(self):
         """Test that notes are ordered by updated_at descending."""
-        note2 = Note.objects.create(            title="Second Note",
+        note2 = Note.objects.create(
+            title="Second Note",
             content="Second content"
         )
-        note3 = Note.objects.create(            title="Third Note",
+        note3 = Note.objects.create(
+            title="Third Note",
             content="Third content"
         )
 
@@ -95,7 +98,7 @@ class NoteModelTest(TestCase):
 class NoteFormTest(TestCase):
     """
     Test cases for the NoteForm.
-    
+
     This test class verifies form validation, widget attributes,
     and error handling for the note creation and editing form.
     """
@@ -163,7 +166,7 @@ class NoteFormTest(TestCase):
 class NoteSearchFormTest(TestCase):
     """
     Test cases for the NoteSearchForm.
-    
+
     This test class verifies the search form functionality including
     validation with valid data, empty data, and partial data scenarios.
     """
@@ -194,7 +197,7 @@ class NoteSearchFormTest(TestCase):
 class NoteViewsTest(TestCase):
     """
     Test cases for the Note views.
-    
+
     This test class verifies all view functionality including CRUD operations,
     search and filtering, archiving, and error handling for the note views.
     """
@@ -202,16 +205,18 @@ class NoteViewsTest(TestCase):
     def setUp(self):
         """
         Set up test data and client for view tests.
-        
+
         Creates test notes and a test client for making HTTP requests.
         """
         self.client = Client()
-        self.note = Note.objects.create(            title="Test Note",
+        self.note = Note.objects.create(
+            title="Test Note",
             content="Test content",
             category="personal",
             priority="medium"
         )
-        self.note2 = Note.objects.create(            title="Work Note",
+        self.note2 = Note.objects.create(
+            title="Work Note",
             content="Work related content",
             category="work",
             priority="high"
@@ -301,7 +306,8 @@ class NoteViewsTest(TestCase):
             form_data
         )
         self.assertEqual(response.status_code, 200)  # Stay on form page
-        self.assertContains(response, "This field is required")  # Django's default error message
+        # Django's default error message
+        self.assertContains(response, "This field is required")
 
     def test_note_detail_view(self):
         """Test the note detail view."""
@@ -356,7 +362,9 @@ class NoteViewsTest(TestCase):
             reverse('sticky_notes_app:note_delete', args=[self.note.pk])
         )
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'sticky_notes_app/note_confirm_delete.html')
+        self.assertTemplateUsed(
+            response, 'sticky_notes_app/note_confirm_delete.html'
+        )
         self.assertContains(response, "Confirm Deletion")
 
     def test_note_delete_view_post(self):
@@ -370,6 +378,7 @@ class NoteViewsTest(TestCase):
         # Check if note was deleted
         with self.assertRaises(Note.DoesNotExist):
             Note.objects.get(pk=note_pk)
+
     def test_note_archive_view(self):
         """Test note archive functionality."""
         self.assertFalse(self.note.is_archived)
@@ -390,7 +399,9 @@ class NoteViewsTest(TestCase):
             {'search_query': 'Test', 'category_filter': 'personal'}
         )
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'sticky_notes_app/search_results.html')
+        self.assertTemplateUsed(
+            response, 'sticky_notes_app/search_results.html'
+        )
         self.assertContains(response, "Test Note")
         self.assertNotContains(response, "Work Note")
 
@@ -398,7 +409,7 @@ class NoteViewsTest(TestCase):
 class NoteURLsTest(TestCase):
     """
     Test cases for URL patterns.
-    
+
     This test class verifies that all URL patterns are correctly configured
     and resolve to the expected view functions and class-based views.
     """
@@ -447,7 +458,7 @@ class NoteURLsTest(TestCase):
 class NoteIntegrationTest(TestCase):
     """
     Integration tests for complete workflows.
-    
+
     This test class verifies end-to-end workflows including complete
     note lifecycle management and search/filter functionality.
     """
@@ -455,7 +466,7 @@ class NoteIntegrationTest(TestCase):
     def setUp(self):
         """
         Set up test data for integration tests.
-        
+
         Creates a test client for making HTTP requests in workflow tests.
         """
         self.client = Client()
@@ -524,20 +535,24 @@ class NoteIntegrationTest(TestCase):
         # Verify deletion
         with self.assertRaises(Note.DoesNotExist):
             Note.objects.get(pk=note.pk)
+
     def test_search_and_filter_workflow(self):
         """Test search and filter functionality workflow."""
         # Create multiple notes
-        Note.objects.create(            title="Personal Task",
+        Note.objects.create(
+            title="Personal Task",
             content="Personal task content",
             category="personal",
             priority="low"
         )
-        Note.objects.create(            title="Work Task",
+        Note.objects.create(
+            title="Work Task",
             content="Work task content",
             category="work",
             priority="high"
         )
-        Note.objects.create(            title="Shopping List",
+        Note.objects.create(
+            title="Shopping List",
             content="Shopping items",
             category="shopping",
             priority="medium"
@@ -577,7 +592,7 @@ class NoteIntegrationTest(TestCase):
 class NoteEdgeCasesTest(TestCase):
     """
     Test edge cases and error conditions.
-    
+
     This test class verifies the application's behavior under edge conditions
     including very long content, special characters, concurrent operations,
     and boundary conditions.
@@ -586,11 +601,12 @@ class NoteEdgeCasesTest(TestCase):
     def setUp(self):
         """
         Set up test data for edge case tests.
-        
+
         Creates a test note and client for testing edge conditions.
         """
         self.client = Client()
-        self.note = Note.objects.create(            title="Edge Case Note",
+        self.note = Note.objects.create(
+            title="Edge Case Note",
             content="Edge case content",
             category="other",
             priority="medium"
@@ -671,17 +687,20 @@ class NoteEdgeCasesTest(TestCase):
         """Test note ordering when multiple notes have same timestamp."""
         # Create notes with same timestamp
         timestamp = timezone.now()
-        note1 = Note.objects.create(            title="First Note",
+        note1 = Note.objects.create(
+            title="First Note",
             content="First content",
             created_at=timestamp,
             updated_at=timestamp
         )
-        note2 = Note.objects.create(            title="Second Note",
+        note2 = Note.objects.create(
+            title="Second Note",
             content="Second content",
             created_at=timestamp,
             updated_at=timestamp
         )
 
-        notes = Note.objects.all()        # Should maintain creation order when timestamps are identical
+        notes = Note.objects.all()
+        # Should maintain creation order when timestamps are identical
         self.assertIn(note1, notes)
         self.assertIn(note2, notes)

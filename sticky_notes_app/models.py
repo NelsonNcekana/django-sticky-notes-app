@@ -11,10 +11,10 @@ from django.db import models
 class Note(models.Model):
     """
     Model representing a sticky note in the application.
-    
+
     This model stores all the information for a sticky note including
     title, content, category, priority, timestamps, and archive status.
-    
+
     Attributes:
         title (CharField): The title of the note (max 200 characters)
         content (TextField): The main content/body of the note
@@ -23,7 +23,7 @@ class Note(models.Model):
         created_at (DateTimeField): Timestamp when note was created
         updated_at (DateTimeField): Timestamp when note was last modified
         is_archived (BooleanField): Whether the note is archived or not
-    
+
     Meta:
         ordering: Notes are ordered by updated_at in descending order
         verbose_name: Human-readable name for the model
@@ -89,7 +89,7 @@ class Note(models.Model):
     def __str__(self):
         """
         String representation of the Note instance.
-        
+
         Returns:
             str: The title of the note
         """
@@ -98,7 +98,7 @@ class Note(models.Model):
     def get_priority_color(self):
         """
         Get CSS class name for priority-based styling.
-        
+
         Returns:
             str: CSS class name corresponding to the note's priority level
         """
@@ -113,7 +113,7 @@ class Note(models.Model):
     def get_category_color(self):
         """
         Get CSS class name for category-based styling.
-        
+
         Returns:
             str: CSS class name corresponding to the note's category
         """

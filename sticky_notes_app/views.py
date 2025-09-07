@@ -20,16 +20,6 @@ from .forms import NoteForm, NoteSearchForm
 class NoteListView(ListView):
     """
     View for displaying a list of notes with search and filter capabilities.
-    
-    This view displays all non-archived notes with pagination, search functionality,
-    and filtering by category and priority. It also provides context data for
-    the search form and choice options.
-    
-    Attributes:
-        model: The Note model to display
-        template_name: Template used to render the list
-        context_object_name: Name of the context variable containing notes
-        paginate_by: Number of notes per page
     """
     model = Note
     template_name = 'sticky_notes_app/note_list.html'
@@ -39,7 +29,7 @@ class NoteListView(ListView):
     def get_queryset(self):
         """
         Filter notes based on search and filter parameters.
-        
+
         Returns:
             QuerySet: Filtered queryset of non-archived notes
         """
@@ -66,10 +56,10 @@ class NoteListView(ListView):
     def get_context_data(self, **kwargs):
         """
         Add additional context data to the template.
-        
+
         Args:
             **kwargs: Additional keyword arguments
-            
+
         Returns:
             dict: Context dictionary with search form and choices
         """
@@ -83,10 +73,10 @@ class NoteListView(ListView):
 class NoteCreateView(CreateView):
     """
     View for creating new notes.
-    
+
     This view handles the creation of new notes using the NoteForm.
     It provides success and error messages to the user.
-    
+
     Attributes:
         model: The Note model to create
         form_class: Form class to use for note creation
@@ -101,10 +91,10 @@ class NoteCreateView(CreateView):
     def form_valid(self, form):
         """
         Handle valid form submission.
-        
+
         Args:
             form: The validated form instance
-            
+
         Returns:
             HttpResponseRedirect: Redirect to success URL
         """
@@ -114,10 +104,10 @@ class NoteCreateView(CreateView):
     def form_invalid(self, form):
         """
         Handle invalid form submission.
-        
+
         Args:
             form: The invalid form instance
-            
+
         Returns:
             HttpResponse: Response with form errors
         """
@@ -128,10 +118,10 @@ class NoteCreateView(CreateView):
 class NoteDetailView(DetailView):
     """
     View for displaying a single note's details.
-    
+
     This view displays the full details of a specific note.
     Only non-archived notes are accessible through this view.
-    
+
     Attributes:
         model: The Note model to display
         template_name: Template used to render the detail view
@@ -144,7 +134,7 @@ class NoteDetailView(DetailView):
     def get_queryset(self):
         """
         Filter queryset to only include non-archived notes.
-        
+
         Returns:
             QuerySet: Filtered queryset of non-archived notes
         """
@@ -154,11 +144,11 @@ class NoteDetailView(DetailView):
 class NoteUpdateView(UpdateView):
     """
     View for updating existing notes.
-    
+
     This view handles the editing of existing notes using the NoteForm.
     It provides success and error messages to the user.
     Only non-archived notes can be updated.
-    
+
     Attributes:
         model: The Note model to update
         form_class: Form class to use for note editing
@@ -173,7 +163,7 @@ class NoteUpdateView(UpdateView):
     def get_queryset(self):
         """
         Filter queryset to only include non-archived notes.
-        
+
         Returns:
             QuerySet: Filtered queryset of non-archived notes
         """
@@ -182,10 +172,10 @@ class NoteUpdateView(UpdateView):
     def form_valid(self, form):
         """
         Handle valid form submission.
-        
+
         Args:
             form: The validated form instance
-            
+
         Returns:
             HttpResponseRedirect: Redirect to success URL
         """
@@ -195,10 +185,10 @@ class NoteUpdateView(UpdateView):
     def form_invalid(self, form):
         """
         Handle invalid form submission.
-        
+
         Args:
             form: The invalid form instance
-            
+
         Returns:
             HttpResponse: Response with form errors
         """
@@ -209,11 +199,11 @@ class NoteUpdateView(UpdateView):
 class NoteDeleteView(DeleteView):
     """
     View for deleting notes.
-    
+
     This view handles the deletion of notes with confirmation.
     It provides success messages to the user.
     Only non-archived notes can be deleted.
-    
+
     Attributes:
         model: The Note model to delete
         template_name: Template used to render the confirmation page
@@ -226,7 +216,7 @@ class NoteDeleteView(DeleteView):
     def get_queryset(self):
         """
         Filter queryset to only include non-archived notes.
-        
+
         Returns:
             QuerySet: Filtered queryset of non-archived notes
         """
@@ -235,12 +225,12 @@ class NoteDeleteView(DeleteView):
     def delete(self, request, *args, **kwargs):
         """
         Handle note deletion.
-        
+
         Args:
             request: The HTTP request object
             *args: Additional positional arguments
             **kwargs: Additional keyword arguments
-            
+
         Returns:
             HttpResponseRedirect: Redirect to success URL
         """
@@ -251,14 +241,14 @@ class NoteDeleteView(DeleteView):
 def note_archive(request, pk):
     """
     Toggle the archive status of a note.
-    
+
     This function-based view toggles the archive status of a note.
     If the note is currently archived, it will be unarchived, and vice versa.
-    
+
     Args:
         request: The HTTP request object
         pk (int): Primary key of the note to archive/unarchive
-        
+
     Returns:
         HttpResponseRedirect: Redirect to the note list page
     """
@@ -275,14 +265,14 @@ def note_archive(request, pk):
 def note_search(request):
     """
     Handle note search functionality.
-    
+
     This function-based view processes search queries and filters notes
     based on search terms, category, and priority. It renders the search
     results in a dedicated template.
-    
+
     Args:
         request: The HTTP request object containing search parameters
-        
+
     Returns:
         HttpResponse: Rendered search results page
     """
@@ -319,13 +309,13 @@ def note_search(request):
 def home(request):
     """
     Home page view that redirects to the note list.
-    
+
     This simple function-based view serves as the home page and redirects
     users to the main note list view.
-    
+
     Args:
         request: The HTTP request object
-        
+
     Returns:
         HttpResponseRedirect: Redirect to the note list page
     """
