@@ -115,7 +115,7 @@ python manage.py collectstatic
 
 ### Step 7: Run Development Server
 ```bash
-python manage.py runserver
+python3 manage.py runserver
 ```
 
 ### Step 8: Access the Application
@@ -182,8 +182,9 @@ python manage.py runserver
 
 ### Running Tests
 ```bash
-python manage.py test
+python3 manage.py test
 ```
+On MacOs
 
 ### Code Quality
 - Follow PEP 8 style guidelines
@@ -211,7 +212,7 @@ DATABASE_URL=postgresql://user:password@host:port/dbname
 
 ### Static Files
 ```bash
-python manage.py collectstatic
+python3 manage.py collectstatic
 # Configure web server to serve from STATIC_ROOT
 ```
 
@@ -233,13 +234,13 @@ python manage.py collectstatic
 
 #### Static Files Not Loading
 ```bash
-python manage.py collectstatic
+python3 manage.py collectstatic
 # Check STATIC_URL and STATIC_ROOT in settings.py
 ```
 
 #### Database Errors
 ```bash
-python manage.py makemigrations
+python3 manage.py makemigrations
 python manage.py migrate
 ```
 
@@ -252,18 +253,6 @@ python manage.py migrate
 - Check template file paths
 - Verify template syntax
 - Check context variables in views
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
-
-## License
-
-This project is open source and available under the MIT License.
 
 ## Support
 
@@ -278,6 +267,7 @@ For questions or issues:
 - Bootstrap team for the CSS framework
 - Font Awesome for the icon library
 - All contributors to this project
+- Including Dave from youtube
 
 ---
 

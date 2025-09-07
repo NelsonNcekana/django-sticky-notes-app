@@ -1,9 +1,9 @@
 GitHub Repository: Sticky Notes Application
 
 Repository Name: django-sticky-notes-app
-Repository URL: https://github.com/[YOUR_USERNAME]/django-sticky-notes-app
+Repository URL: https://github.com/NelsonNcekana/django-sticky-notes-app
 
-IMPORTANT: Replace [YOUR_USERNAME] with your actual GitHub username when creating the repository.
+Repository Status: ✅ LIVE and ACCESSIBLE
 Repository Type: Public
 Description: A full-featured Django sticky notes application demonstrating MVT architecture and CRUD functionality
 
@@ -51,4 +51,4 @@ Portfolio Value:
 - Professional code organization
 - Modern web development practices
 
-Note: Replace [YOUR_USERNAME] with your actual GitHub username when creating the repository.
+Note: The local development server (http://127.0.0.1:8000/) only works on the developer's machine. To run locally, clone the repository and follow the setup instructions in README.md.
