@@ -1,5 +1,10 @@
 """
 Tests for the sticky_notes_app.
+
+This module contains comprehensive test cases for the sticky notes application,
+including unit tests for models, forms, views, URLs, and integration tests
+for complete workflows. The tests ensure all functionality works correctly
+and edge cases are handled properly.
 """
 from django.test import TestCase, Client
 from django.urls import reverse
@@ -10,10 +15,20 @@ import datetime
 
 
 class NoteModelTest(TestCase):
-    """Test cases for the Note model."""
+    """
+    Test cases for the Note model.
+    
+    This test class verifies all aspects of the Note model including
+    creation, validation, string representation, default values, choices,
+    ordering, and archiving functionality.
+    """
 
     def setUp(self):
-        """Set up test data."""
+        """
+        Set up test data for each test method.
+        
+        Creates a test note instance that can be used across multiple tests.
+        """
         self.note = Note.objects.create(
             title="Test Note",
             content="This is a test note content",
@@ -78,7 +93,12 @@ class NoteModelTest(TestCase):
 
 
 class NoteFormTest(TestCase):
-    """Test cases for the NoteForm."""
+    """
+    Test cases for the NoteForm.
+    
+    This test class verifies form validation, widget attributes,
+    and error handling for the note creation and editing form.
+    """
 
     def test_note_form_valid_data(self):
         """Test form with valid data."""
@@ -141,7 +161,12 @@ class NoteFormTest(TestCase):
 
 
 class NoteSearchFormTest(TestCase):
-    """Test cases for the NoteSearchForm."""
+    """
+    Test cases for the NoteSearchForm.
+    
+    This test class verifies the search form functionality including
+    validation with valid data, empty data, and partial data scenarios.
+    """
 
     def test_search_form_valid_data(self):
         """Test search form with valid data."""
@@ -167,10 +192,19 @@ class NoteSearchFormTest(TestCase):
 
 
 class NoteViewsTest(TestCase):
-    """Test cases for the Note views."""
+    """
+    Test cases for the Note views.
+    
+    This test class verifies all view functionality including CRUD operations,
+    search and filtering, archiving, and error handling for the note views.
+    """
 
     def setUp(self):
-        """Set up test data and client."""
+        """
+        Set up test data and client for view tests.
+        
+        Creates test notes and a test client for making HTTP requests.
+        """
         self.client = Client()
         self.note = Note.objects.create(            title="Test Note",
             content="Test content",
@@ -362,7 +396,12 @@ class NoteViewsTest(TestCase):
 
 
 class NoteURLsTest(TestCase):
-    """Test cases for URL patterns."""
+    """
+    Test cases for URL patterns.
+    
+    This test class verifies that all URL patterns are correctly configured
+    and resolve to the expected view functions and class-based views.
+    """
 
     def test_home_url(self):
         """Test home URL pattern."""
@@ -406,10 +445,19 @@ class NoteURLsTest(TestCase):
 
 
 class NoteIntegrationTest(TestCase):
-    """Integration tests for complete workflows."""
+    """
+    Integration tests for complete workflows.
+    
+    This test class verifies end-to-end workflows including complete
+    note lifecycle management and search/filter functionality.
+    """
 
     def setUp(self):
-        """Set up test data."""
+        """
+        Set up test data for integration tests.
+        
+        Creates a test client for making HTTP requests in workflow tests.
+        """
         self.client = Client()
 
     def test_complete_note_workflow(self):
@@ -527,10 +575,20 @@ class NoteIntegrationTest(TestCase):
 
 
 class NoteEdgeCasesTest(TestCase):
-    """Test edge cases and error conditions."""
+    """
+    Test edge cases and error conditions.
+    
+    This test class verifies the application's behavior under edge conditions
+    including very long content, special characters, concurrent operations,
+    and boundary conditions.
+    """
 
     def setUp(self):
-        """Set up test data."""
+        """
+        Set up test data for edge case tests.
+        
+        Creates a test note and client for testing edge conditions.
+        """
         self.client = Client()
         self.note = Note.objects.create(            title="Edge Case Note",
             content="Edge case content",

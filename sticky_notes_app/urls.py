@@ -1,13 +1,20 @@
 """
 URL configuration for sticky_notes_app.
+
+This module defines the URL patterns for the sticky notes application,
+including all CRUD operations, search functionality, and archiving features.
+The URLs are organized with clear naming conventions and proper namespacing.
 """
+
 from django.urls import path
 from . import views
 
+# Application namespace for URL reversing
 app_name = 'sticky_notes_app'
 
+# URL patterns for the sticky notes application
 urlpatterns = [
-    # Home page
+    # Home page - redirects to note list
     path('', views.home, name='home'),
 
     # Note CRUD operations
